@@ -9,6 +9,8 @@ import torchvision
 from torch import nn, optim
 from torchvision import transforms
 
+USE_CUDA = False
+
 # read in the MNIST data set
 transform = transforms.Compose([transforms.ToTensor(),
                                 transforms.Normalize((0.5,), (0.5,)),
@@ -38,9 +40,9 @@ criterion = nn.L1Loss()  # using MSE (mean squared error)
 
 # check if CUDA is available (to increase performance)
 cuda = False
-if torch.cuda.is_available():
+if USE_CUDA and torch.cuda.is_available():
     cuda = True
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # function which takes an image and a label
