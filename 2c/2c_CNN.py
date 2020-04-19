@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process, freeze_support
 
+USE_CUDA = False
+
 
 class Flatten(nn.Module):
     """
@@ -138,12 +140,11 @@ def run():
     optimizer = optim.SGD(net.parameters(), lr=0.003, momentum=0.9)
 
     cuda = False
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    if torch.cuda.is_available():
-        cuda = True
-        net.to(device)
-    # Assuming that we are on a CUDA machine, this should print a CUDA device:
-    # print(device)
+    if USE_CUDA:
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if torch.cuda.is_available():
+            cuda = True
+            net.to(device)
 
     epochs = 2
     log_interval = 10000
