@@ -137,10 +137,13 @@ def run():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.003, momentum=0.9)
 
+    cuda = False
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        cuda = True
+        net.to(device)
     # Assuming that we are on a CUDA machine, this should print a CUDA device:
     # print(device)
-    net.to(device)
 
     epochs = 2
     log_interval = 10000
@@ -150,8 +153,8 @@ def run():
             # data, target = Variable(data), Variable(target)
             # resize data from (batch_size, 1, 28, 28) to (batch_size, 28*28)
             # data = data.view(-1, 28 * 28)
-
-            data, target = data.to(device), target.to(device)
+            if cuda:
+                data, target = data.to(device), target.to(device)
 
             optimizer.zero_grad()
             net_out = net(data)
@@ -175,7 +178,8 @@ def run():
 
     # net = PR_CNN()
     # net.load_state_dict(torch.load(PATH))
-    images, labels = images.to(device), labels.to(device)
+    if cuda:
+        images, labels = images.to(device), labels.to(device)
     outputs = net(images)
     _, predicted = torch.max(outputs, 1)
 
@@ -189,7 +193,8 @@ def run():
         for data, target in test_loader:
             # data, target = Variable(data), Variable(target)
             # data = data.view(-1, 28 * 28)
-            data, target = data.to(device), target.to(device)
+            if cuda:
+                data, target = data.to(device), target.to(device)
             net_out = net(data)
             # sum up batch loss
             test_loss += criterion(net_out, target).data.item()
