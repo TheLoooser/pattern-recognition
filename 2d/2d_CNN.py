@@ -8,7 +8,7 @@ import numpy as np
 from multiprocessing import Process, freeze_support
 
 # Set this to true if you want to use cuda if possible
-USE_CUDA = False
+USE_CUDA = True
 
 class Flatten(nn.Module):
     """
@@ -129,8 +129,7 @@ def run():
             net.to(device)
 
     epochs = 2
-    train_error = []
-    val_error = []
+
     log_interval = 10000
     # run the main training loop
     for epoch in range(epochs):
@@ -198,9 +197,9 @@ def run():
     fig = plt.figure()
     plt.plot(train_error, color='blue')
     plt.plot(val_error, color='red')
-    plt.legend(['Train Error', 'Test Error'], loc='upper right')
-    plt.xlabel('epochs')
-    plt.ylabel('error')
+    plt.legend(['Train Accuracy', 'Test Accuracy'], loc='upper right')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
     # for older plt versions
     # fig.show()
     plt.show()
