@@ -7,7 +7,5 @@ test set (not visible in the image). And even after 60 epoches we do not get any
 
 Unfortunately, there is a small issue, which prevented us from further optimising the parameters (# of hidden layers, learning rate, # of
 epochs) and this is also the reason, why we use this older image. The problem is that our implementation goes by the lecture too closely.
-I.e. we used the MSE as criterion, which meant that we could only do batch sizes of size 1. This resulted in very long execution times. For
-example, one epoch takes around three minutes to execute and therefore it took somewhere over three hours to get the accuracy plot with 60
-epoches. And because it takes so long for one network to train, validate and test, it is quite cumbersome to test with multiple different
-parameters.
+I.e. we used the MSE as criterion, which meant that we could only do batch sizes of size 1. This resulted in very long execution times. 
+For example, one epoch takes around three minutes to execute and therefore it took somewhere over three hours to get the accuracy plot with 60 epoches. And because it takes so long for one network to train, validate and test, it is quite cumbersome to test with multiple different parameters.
