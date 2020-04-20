@@ -12,9 +12,11 @@ from torchvision import transforms
 USE_CUDA = False
 
 # read in the MNIST data set
-transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5,), (0.5,)),
-                                ])
+transform = transforms.Compose([
+                            transforms.Grayscale(num_output_channels=1),
+                            transforms.ToTensor(),
+                            transforms.Normalize((0.5,), (0.5,)),
+                            ])
 
 trainset = torchvision.datasets.MNIST(root='./data', download=True, train=True, transform=transform)
 testset = torchvision.datasets.MNIST(root='./data', download=True, train=False, transform=transform)
@@ -145,3 +147,4 @@ plt.legend(['Train Error', 'Test Error'], loc='upper right')
 plt.xlabel('epochs')
 plt.ylabel('error')
 fig.show()
+plt.show()

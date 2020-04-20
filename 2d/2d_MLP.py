@@ -14,15 +14,15 @@ transform = transforms.Compose([transforms.ToTensor(),
                                 transforms.Normalize((0.5,), (0.5,)),
                                 ])
 
-data_path = 'D:\\UniMSc\\PR\\mnist-permutated-png-format\\mnist\\train'
+data_path = 'mnist-permutated-png-format/mnist/train'
 train_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
 trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True)
 
-data_path = 'D:\\UniMSc\\PR\\mnist-permutated-png-format\\mnist\\val'
+data_path = 'mnist-permutated-png-format/mnist/val'
 val_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
 validationloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, shuffle=True)
 
-data_path = 'D:\\UniMSc\\PR\\mnist-permutated-png-format\\mnist\\test'
+data_path = 'mnist-permutated-png-format/mnist/test'
 test_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
 testloader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=True)
 
@@ -60,8 +60,8 @@ criterion = nn.L1Loss()  # using MSE (mean squared error)
 # check if CUDA is available (to increase performance)
 cuda = False
 if torch.cuda.is_available():
-    cuda = True
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    cuda = False
+device = torch.device("cuda:0" if cuda else "cpu")
 
 
 # function which takes an image and a label
@@ -133,7 +133,7 @@ print("\nTraining Time (in minutes) =", (time() - time0) / 60)
 # testing procedure (get accuracy of trained network)
 correct_count, all_count = 0, 0
 for idx, (image, label) in enumerate(testloader):
-    img = image.view(-1, 784)
+    img = image.view(-1, 784) # TODO change image to grayscale instead
     if cuda:
         img = img.to(device)
     with torch.no_grad():
