@@ -8,7 +8,7 @@ import numpy as np
 from multiprocessing import Process, freeze_support
 
 # Set this to true if you want to use cuda if possible
-USE_CUDA = True
+USE_CUDA = False
 
 class Flatten(nn.Module):
     """
@@ -99,7 +99,7 @@ def run():
 
     data_path = 'mnist-permutated-png-format/mnist/train'
     train_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 
     data_path = 'mnist-permutated-png-format/mnist/val'
     val_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
@@ -128,7 +128,9 @@ def run():
             cuda = True
             net.to(device)
 
-    epochs = 2
+    epochs = 10
+    train_error = []
+    val_error = []
 
     log_interval = 10000
     # run the main training loop
