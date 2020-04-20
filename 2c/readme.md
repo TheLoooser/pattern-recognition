@@ -2,9 +2,12 @@
 
 The code for this exercise can be found under 2c_CNN.py
 
-In order to find a sensible number of epochs for the training of our CNN, we let it run over a somewhat long time span (60 epochs). Here are the plots for both accuracy as well as loss for the different epochs:
+In order to find a sensible number of epochs for the training of our CNN, we let it run over a somewhat long time span (60 epochs). We used a learning rate of 0.003 and a batch size of 16 for the training set. Here are the plots for both accuracy as well as loss over the different epochs:
 
-![Accuracy Graph](/2c/2c_accuracy_plot.png)
-![Loss Graph](/2c/2c_accuracy_plot.png)
+![Accuracy Graph](/2c/2c_accuracy_plot.png) ![Loss Graph](/2c/2c_accuracy_plot.png)
 
-As we can see the "Test Accuracy" - which is wrongly labeled and is in fact the validation accuracy - increases fast in the beginning but then levels out at about 99% accuracy. This was achieved with a learning rate of 0.003 and using stochastic gradient descent. Now while the accuracy flattens out for higher epochs, the loss (which as expected decreased rapidly in the first few epochs) starts to increase again at around the 18th epoch. I assume this is due to the fact that with higher accuracy the learning rate has a bigger influence if it is kept the same. As such decreasing the learning rate periodically for higher epochs might be an approach to achieve some further increase in accuracy. But in order to keep things simple, we decided to use 10 epochs for the CNN which is still a low number of epochs with a high accuracy. Whith that (and again with the learning rate 0.003) we achieved a test accuracy of 97.48% and an average loss of 0.0364.
+As we can see the accuracy increases fast in the first couple of epochs but then begins to levels out. But while after about 10 epochs the validation accuracy stays more or less at 98% the training accuracy keeps slowly increasing and approaching 100%. The same with the loss: While both training and validation loss decrease rapidly in the beginning, the validation loss levels out while the training loss keeps decreasing. This is why validation is important; if we let it train long enough the neural network will be able to perfectly predict the training data but may fail with the actual data it is supposed to classify. As such, in order to optimize the training time necessary while still getting good accuracy, we looked at the level out of the validation accuracy curve and chose 10 epochs for further training. 
+
+The best accuracy we achieved with this (and again with the learning rate 0.003 and batch size 16) a test accuracy of 98.61% with an average loss of 0.0144.
+
+
