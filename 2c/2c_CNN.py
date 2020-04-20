@@ -116,7 +116,7 @@ def run():
     validation_size = len(train_set) - train_size
     train_dataset, validation_dataset = torch.utils.data.random_split(train_set, [train_size, validation_size])
 
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=2)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=2)
     validation_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=4, shuffle=True, num_workers=2)
 
     test_set = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=transform)
@@ -147,7 +147,7 @@ def run():
             cuda = True
             net.to(device)
 
-    epochs = 12
+    epochs = 60
     log_interval = 10000
     size = len(train_loader.dataset)
     train_error = []
@@ -242,22 +242,25 @@ def run():
             correct += pred.eq(target.data).sum()
 
         test_loss /= len(test_loader.dataset)
-        print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
             test_loss, correct, len(test_loader.dataset),
             100. * correct / len(test_loader.dataset)))
+
+        print('\nValidation set: \nAverage loss: {:.4f}, Accuracy: {:.2f}%\n'.format(
+            val_loss[-1], val_error[-1]))
 
     # plot results
     plt.figure(1)
     plt.plot(train_error, color='blue')
     plt.plot(val_error, color='red')
-    plt.legend(['Train Accuracy', 'Test Accuracy'], loc='upper right')
+    plt.legend(['Train Accuracy', 'Validation Accuracy'], loc='upper right')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
 
     plt.figure(2)
     plt.plot(train_loss, color='blue')
     plt.plot(val_loss, color='red')
-    plt.legend(['Training Loss', 'Testing Loss'], loc='upper right')
+    plt.legend(['Training Loss', 'Validation Loss'], loc='upper right')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.show()
