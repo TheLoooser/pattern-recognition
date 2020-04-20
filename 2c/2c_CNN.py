@@ -147,7 +147,7 @@ def run():
             cuda = True
             net.to(device)
 
-    epochs = 60
+    epochs = 12
     log_interval = 10000
     size = len(train_loader.dataset)
     train_error = []
