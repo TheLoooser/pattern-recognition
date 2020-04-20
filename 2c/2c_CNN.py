@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process, freeze_support
 
-USE_CUDA = False
+USE_CUDA = True
 
 
 class Flatten(nn.Module):
@@ -139,6 +139,7 @@ def run():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.003, momentum=0.9)
 
+    # CUDA setup
     cuda = False
     if USE_CUDA:
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -146,10 +147,18 @@ def run():
             cuda = True
             net.to(device)
 
-    epochs = 2
+    epochs = 60
     log_interval = 10000
+    size = len(train_loader.dataset)
+    train_error = []
+    train_loss = []
+    val_error = []
+    val_loss = []
+
     # run the main training loop
     for epoch in range(epochs):
+        correct = 0
+        loss_sum = 0
         for batch_idx, (data, target) in enumerate(train_loader):
             # data, target = Variable(data), Variable(target)
             # resize data from (batch_size, 1, 28, 28) to (batch_size, 28*28)
@@ -160,12 +169,42 @@ def run():
             optimizer.zero_grad()
             net_out = net(data)
             loss = criterion(net_out, target)
+            # backpropagation
             loss.backward()
+            # optimize weights
             optimizer.step()
+
+            # get the index of the max log-probability
+            pred = net_out.data.max(1)[1]
+            # compares label and prediction tensors, returns 1 if same, 0 otherwise
+            correct += int(pred.eq(target.data).sum())
+            loss_sum += loss.data.item()
+
             if batch_idx % log_interval == 0:
                 print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, batch_idx * len(data), len(train_loader.dataset),
                          100. * batch_idx / len(train_loader), loss.data.item()))
+
+        # store train error and loss
+        train_error.append(100. * correct / size)
+        train_loss.append(loss_sum/len(train_loader.dataset))
+
+        # validate model after each epoch
+        validation_correct = 0
+        loss_sum = 0
+        for data, target in validation_loader:
+            if cuda:
+                data, target = data.to(device), target.to(device)
+            net_out = net(data)
+            loss_sum += criterion(net_out,target).data.item()
+            pred = net_out.data.max(1)[1]  # get the index of the max log-probability
+            # cast from tensor to int
+            validation_correct += int(pred.eq(target.data).sum())
+            loss = criterion(net_out, target)
+
+        # store validation_error and loss
+        val_error.append(100. * validation_correct / len(validation_loader.dataset))
+        val_loss.append(loss_sum/len(validation_loader.dataset))
 
     torch.save(net.state_dict(), PATH)
 
@@ -207,6 +246,21 @@ def run():
             test_loss, correct, len(test_loader.dataset),
             100. * correct / len(test_loader.dataset)))
 
+    # plot results
+    plt.figure(1)
+    plt.plot(train_error, color='blue')
+    plt.plot(val_error, color='red')
+    plt.legend(['Train Accuracy', 'Test Accuracy'], loc='upper right')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+
+    plt.figure(2)
+    plt.plot(train_loss, color='blue')
+    plt.plot(val_loss, color='red')
+    plt.legend(['Training Loss', 'Testing Loss'], loc='upper right')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.show()
 
 if __name__ == '__main__':
     run()
