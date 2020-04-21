@@ -103,11 +103,11 @@ def run():
 
     data_path = 'mnist-permutated-png-format/mnist/val'
     val_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
-    validation_loader = torch.utils.data.DataLoader(val_dataset, batch_size=1, shuffle=True)
+    validation_loader = torch.utils.data.DataLoader(val_dataset, batch_size=4, shuffle=True)
 
     data_path = 'mnist-permutated-png-format/mnist/test'
     test_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=transform)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=4, shuffle=True)
 
     classes = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
 
@@ -128,14 +128,17 @@ def run():
             cuda = True
             net.to(device)
 
-    epochs = 10
+    epochs = 60
     train_error = []
     val_error = []
+    train_loss = []
+    val_loss = []
 
     log_interval = 10000
     # run the main training loop
     for epoch in range(epochs):
         correct = 0
+        loss_sum = 0
         size = len(train_loader.dataset)
         for batch_idx, (data, target) in enumerate(train_loader):
             if cuda:
@@ -155,6 +158,7 @@ def run():
             pred = net_out.data.max(1)[1]
             # compares label and prediction tensors, returns 1 if same, 0 otherwise
             correct += int(pred.eq(target.data).sum())
+            loss_sum += loss.data.item()
         
             # logging for supervision
             if batch_idx % log_interval == 0:
@@ -164,18 +168,22 @@ def run():
 
         # store train error
         train_error.append(100. * correct / size)
+        train_loss.append(loss_sum/len(train_loader.dataset))
 
         # validate model after each epoch
         validation_correct = 0
+        loss_sum = 0
         for data, target in validation_loader:
             if cuda:
                 data, target = data.to(device), target.to(device)
             net_out = net(data)
+            loss_sum += criterion(net_out,target).data.item()
             pred = net_out.data.max(1)[1]  # get the index of the max log-probability
             # cast from tensor to int
             validation_correct += int(pred.eq(target.data).sum())
         # store validation_error
         val_error.append(100. * validation_correct / len(validation_loader.dataset))
+        val_loss.append(loss_sum/len(validation_loader.dataset))
 
     # run a test loop
     test_loss = 0
@@ -196,14 +204,19 @@ def run():
             100. * correct / len(test_loader.dataset)))
 
     # plot results
-    fig = plt.figure()
+    plt.figure(1)
     plt.plot(train_error, color='blue')
     plt.plot(val_error, color='red')
-    plt.legend(['Train Accuracy', 'Test Accuracy'], loc='upper right')
+    plt.legend(['Train Accuracy', 'Validation Accuracy'], loc='upper right')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
-    # for older plt versions
-    # fig.show()
+
+    plt.figure(2)
+    plt.plot(train_loss, color='blue')
+    plt.plot(val_loss, color='red')
+    plt.legend(['Training Loss', 'Validation Loss'], loc='upper right')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
     plt.show()
 
 if __name__ == '__main__':
