@@ -2,11 +2,13 @@
 
 Here is a comparison of accuracy and loss for the permutated MNIST at the top and the normal MNIST at the bottom (both with learning rate 0.003 and batch size 16 for the training set):
 
-![Accuracy CNN permutated](/2d/accuracy_cnn_60epochs.png) ![Accuracy CNN](/2c/2c_accuracy_plot.png)
+![Accuracy CNN permutated](/2d/accuracy_cnn_60epochs.png)
+![Accuracy CNN](/2c/2c_accuracy_plot.png)
 
 The main difference for the accuracy is the accuracy for the validation set. For the two training sets both accuracies keep approaching 100% with higher epoch numbers, while for the validation the accuracy evens out earlier for the permutated MNIST than the regular dataset and also doesn't increase as fast as for the regular dataset. 
 
-![Accuracy CNN permutated](/2d/loss_cnn_60epochs.png) ![Loss CNN](/2c/2c_loss_plot.png)
+![Accuracy CNN permutated](/2d/loss_cnn_60epochs.png) 
+![Loss CNN](/2c/2c_loss_plot.png)
 
 And with the losses the same is visible; the losses for the permutated validation set decrease slower and have more variance. The other big difference for the losses is the fact that they beginn to increase again with higher epoches for the validation set of the permutated MNIST. All in all the permutation seems to throw the CNN off, I assume because the CNN is dependent on the spacial relation of specific pixels among each other. The best achieved Accuracy we reached with this setup was a test accuracy of 96.65% with an average loss of 0.036.
 
