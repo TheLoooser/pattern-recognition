@@ -120,12 +120,25 @@ def compress_to_feature_vector_binary(image):
             col_nb += 1
     return feature_vector
 
+
 # converts all images in the given images dictionary to their feature vectors
 def reduce_to_feature_vectors(images):
     IMAGES_FEATURES = images
     for image in IMAGES_FEATURES:
         image['image'] = compress_to_feature_vector_binary(image['image'])
     return IMAGES_FEATURES
+
+def feature_vectors(image):
+    return np.count_nonzero(image <255, axis=0)
+
+def features_and_labels(images,transcript):
+    IMAGES_FEATURES = images
+    for i in range(len(images)):
+        image = IMAGES_FEATURES[i]
+        image['image'] = compress_to_feature_vector_binary(image['image'])
+        image['word'] = transcript[i]['word']
+    return IMAGES_FEATURES
+    
 
 # saves given object to pkl format, good for saving computed preproccessed objects (e.g. feature vectors as dicts)
 def save_obj(obj, name ):
