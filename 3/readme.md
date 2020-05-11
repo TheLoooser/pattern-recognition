@@ -32,12 +32,12 @@ But our results are.. well..
 
 #### Final plots
 
-![Final PR plot](plot.jpg)
+![Final PR plot](plot.jpg)  
 The step size of this plot was equal to one.
 
 #### Analysis
 
-Well, as you can see the curves do look somewhat suspect. Both curves do not start at a recall value of zero, but already somewhere around 0.5. Furthermore, in an ideal world, the curves would be convex instead of concave, which would yield a higher average precision (AP) value.
+Well, as you can see the curves do look somewhat suspect. Both curves do not start at a recall value of zero, but already somewhere around 0.5. Furthermore, in an ideal world, the curves would be convex instead of concave, which would yield a higher average precision (AP) value.  
 We do think, that we might have been able to improve this AP value, by adding more features to our feature vector.
 
 ## Further information
