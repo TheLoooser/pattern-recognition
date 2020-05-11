@@ -32,6 +32,8 @@ But our results are.. well..
 
 #### Final plots
 
+![Final PR plot](plot.jpg)
+
 #### Analysis
 
 ## Further information
