@@ -95,6 +95,10 @@ def find_by_word(transcript, word):
             ids.append(id_)
     return ids
 
+
+########################## Feature Extraction ###################################
+
+
 # sums up each column of the given image, returns the feature vector
 # used for sliding window procedure
 def compress_to_feature_vector(image):
@@ -128,9 +132,21 @@ def reduce_to_feature_vectors(images):
         image['image'] = compress_to_feature_vector_binary(image['image'])
     return IMAGES_FEATURES
 
+
+
+def upper_contour(image):
+    return np.argmax(image < 255, axis=0)
+
+def lower_contour(image):
+    return np.argmin(image < 255, axis=0)
+
+def black_pixels(image):
+    return np.count_nonzero(image <255, axis=0)
+
 def feature_vectors(image):
     return np.count_nonzero(image <255, axis=0)
 
+# extracts feature vectore for all given images and adds the ground truth as label
 def features_and_labels(images,transcript):
     IMAGES_FEATURES = images
     for i in range(len(images)):
