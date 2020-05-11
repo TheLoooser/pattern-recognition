@@ -134,6 +134,7 @@ def reduce_to_feature_vectors(images):
 
 
 
+
 def upper_contour(image):
     return np.argmax(image < 255, axis=0)
 
