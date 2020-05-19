@@ -29,3 +29,20 @@ def moleculeToList(molecules):
 def costMatrix (m1, m2, cn, ce):
     matrix = np.empty([len(m1),])
     return matrix
+
+# transform list of molecule nodes to dictionnary (key: molecule_id, value: molecule_symbols)
+def moleculeNodeListToDict(nodesList):
+    nodesDict = dict()
+#     id_counter = 0
+    for node in nodesList:
+        nodesDict[node[0]] = node[1]
+#         nodesDict[id_counter] = {"id": node[0], "symbols": node[1]}
+#         id_counter += 1
+    return nodesDict
+
+# transform list of molecule edges to dictionnary (key: molecule_id, value: list of molecule_edges)
+def moleculeEdgeListToDict(edgesList):
+    edgesDict = dict()
+    for edge in edgesList:
+        edgesDict[edge[0]] = edge[1]
+    return edgesDict
