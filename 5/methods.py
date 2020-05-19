@@ -46,3 +46,39 @@ def moleculeEdgeListToDict(edgesList):
     for edge in edgesList:
         edgesDict[edge[0]] = edge[1]
     return edgesDict
+
+#nr: lenght of molecule
+def moleculeEdgesToCount(nr, edgesList):
+    count = list()
+    for i in range(nr):
+        list.append(sum(x.count(i) for x in edgesList))
+    return count
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
