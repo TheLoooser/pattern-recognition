@@ -1,2 +1,2 @@
 This is the readme  
-Put some usefull information here
+Put some useful information here
