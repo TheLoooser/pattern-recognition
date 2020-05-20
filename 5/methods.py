@@ -1,6 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
 import numpy as np
+import sys
+from munkres import Munkres, print_matrix
 
 def importMolecule(path):
     roots = []
@@ -25,10 +27,6 @@ def moleculeToList(molecules):
         nodesList.append([molecule[0], nodes])
         edgesList.append([molecule[0], edges])
     return [nodesList, edgesList]
-
-def costMatrix (m1, m2, cn, ce):
-    matrix = np.empty([len(m1),])
-    return matrix
 
 # transform list of molecule nodes to dictionnary (key: molecule_id, value: molecule_symbols)
 def moleculeNodeListToDict(nodesList):
@@ -110,30 +108,4 @@ def BP(molecule1, molecule2, edges1, edges2):
     
     #4. return distance/cost
     return total
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  
