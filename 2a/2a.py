@@ -9,6 +9,7 @@ import sklearn.model_selection as model_selection
 import numpy as np
 import dataPreparation as prep
 import warnings
+
 def warning(*args, **kwargs):
     pass
 warnings.warn = warning
@@ -73,17 +74,26 @@ kfold = model_selection.KFold(10)
 #Defines a range, C will be searched between this range
 c1 = 0.1
 c2 = 30
+
+#Initializes an array containing the different pair of C and accuracy and the number of iteration in the algorithm
 results = []
 iteration = 5
 
+#Computes the accuracies of the two border Cs
 lin.C = c1
 result = np.mean(model_selection.cross_val_score(lin, xtrain, y = ytrain, cv=kfold, n_jobs = -1))
 results.append([lin.C, result])
 lin.C = c2
 result = np.mean(model_selection.cross_val_score(lin, xtrain, y = ytrain, cv=kfold, n_jobs = -1))
 results.append([lin.C, result])
+
 place = 0
+
+#This search algorithm computes the accuracy of a certain number of C between two border values.
+#The C with the best accuracy and his best neighbour tested become the new border values.
+#This is done for x iteration defined earlier. It can find a local optimum, doesn't guarantee the global optimum.
 for i in range(0, iteration):
+    #Defines the size of steps between each C tested
     step = (c2 - c1) / 5
     tempResult = []
     for j in range(1, 5):
@@ -108,14 +118,20 @@ for i in range(0, iteration):
         c2 = results[place+1][0]
 
 maxResult = [0,0]
+
+#Search for the best accuracy and its parameter C found during the search algorithm.
 for b in range(0, len(results)):
     if results[b][1] > maxResult[1]:
         maxResult = [results[b][0], results[b][1]]
 lin.C = maxResult[0]
 print(results)
+
+#Fits the train data with the use of the best C
 lin.fit(xtrain,ytrain)
+
+#Predicts the test data and returns the accuracy
 print(lin.score(xtest, ytest))
-        
+
 
 
 
