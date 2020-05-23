@@ -13,7 +13,8 @@ def importMolecule(path):
 
 def moleculeToList(molecules):
     nodesList = []
-    edgesList = []
+    # edgesList = []
+    edgesDict = dict()
     for molecule in molecules:
         nodes = [];
         edges = [];
@@ -25,25 +26,37 @@ def moleculeToList(molecules):
         for element in molecule[1].iter('edge'):
             edges.append([int(element.attrib['from'].replace('_', '')), int(element.attrib['to'].replace('_', ''))])
         nodesList.append([molecule[0], nodes])
-        edgesList.append([molecule[0], edges])
-    return [nodesList, edgesList]
-
-# transform list of molecule nodes to dictionnary (key: molecule_id, value: molecule_symbols)
-def moleculeNodeListToDict(nodesList):
+       # edgesList.append([molecule[0], edges])
+        edgesDict[molecule[0]] = edges
+    
+    # convert to dicts
     nodesDict = dict()
-#     id_counter = 0
     for node in nodesList:
         nodesDict[node[0]] = node[1]
-#         nodesDict[id_counter] = {"id": node[0], "symbols": node[1]}
-#         id_counter += 1
-    return nodesDict
+        
+    edgesCountDict = dict()
+    for molecule in nodesList:
+        nr = len(molecule[1])
+        edgesCountDict[molecule[0]] = moleculeEdgesListToEdgeCountList(nr, edgesDict[molecule[0]])
 
-# transform list of molecule edges to dictionnary (key: molecule_id, value: list of molecule_edges)
-def moleculeEdgeListToDict(edgesList):
-    edgesDict = dict()
-    for edge in edgesList:
-        edgesDict[edge[0]] = edge[1]
-    return edgesDict
+    return nodesDict, edgesDict, edgesCountDict
+
+# # transform list of molecule nodes to dictionnary (key: molecule_id, value: molecule_symbols)
+# def moleculeNodeListToDict(nodesList):
+#     nodesDict = dict()
+# #     id_counter = 0
+#     for node in nodesList:
+#         nodesDict[node[0]] = node[1]
+# #         nodesDict[id_counter] = {"id": node[0], "symbols": node[1]}
+# #         id_counter += 1
+#     return nodesDict
+
+# # transform list of molecule edges to dictionnary (key: molecule_id, value: list of molecule_edges)
+# def moleculeEdgeListToDict(edgesList):
+#     edgesDict = dict()
+#     for edge in edgesList:
+#         edgesDict[edge[0]] = edge[1]
+#     return edgesDict
 
 # counts the number of edges of each node (of a single molecule)
 def moleculeEdgesListToEdgeCountList(nr, edgesList):
@@ -52,20 +65,17 @@ def moleculeEdgesListToEdgeCountList(nr, edgesList):
         count.append(sum(x.count(i+1) for x in edgesList))
     return count
 
-# transforms the list of edges into a dictionnary which counts the number of edges of each node (of ever molecule)
-def moleculeEdgesListToEdgeCountDict(nodesList, edgesDict):
-    edgesCountDict = dict()
-    for molecule in nodesList:
-        nr = len(molecule[1])
-        edgesCountDict[molecule[0]] = moleculeEdgesListToEdgeCountList(nr, edgesDict[molecule[0]])
-    return edgesCountDict
+# # transforms the list of edges into a dictionnary which counts the number of edges of each node (of ever molecule)
+# def moleculeEdgesListToEdgeCountDict(nodesList, edgesDict):
+#     edgesCountDict = dict()
+#     for molecule in nodesList:
+#         nr = len(molecule[1])
+#         edgesCountDict[molecule[0]] = moleculeEdgesListToEdgeCountList(nr, edgesDict[molecule[0]])
+#     return edgesCountDict
 
 
-Cn = 1
-Ce = 1
 # lecture 10 slide 21 (bipartite graph matching)
-def BP(molecule1, molecule2, edges1, edges2):
-    
+def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
     #1. build dirac cost matrix
     matrix = np.matrix(np.ones((len(molecule1)+len(molecule2),len(molecule1)+len(molecule2))) * np.inf)
     #Upper left: substitutions
