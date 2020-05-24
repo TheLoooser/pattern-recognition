@@ -10,28 +10,23 @@ The less technical part of the documentation was written by the member that had 
 ## Tasks
 ### Task 2a-d: SVM, CNN, MLP
 #### Specialities
-**2b** 
-
+**2b**  
 One thing which probably sets our solution apart from the others is that we oriented ourselves too closely to the lecture. I.e. we implemented the MSE criterion, which influenced our performance significantly.  
   
 There is not much special about the other parts for task 2.
 
 #### Approach
-**2a** 
-
+**2a**   
 The idea was to use a library for SVM and Cross-validation and then try different techniques to search for the best parameters for two different kernels: RBF and linear. There was only one parameter to optimize for the implementation with the linear kernel, meaning that multiple algorithms could be tried to find the optimal C. Despite those possibilities, there are a lot of local optimums for C, making it difficult to find the real best parameter.
 For the RBF kernel, there were two parameters to optimize. To find the best - or at least a good - pair of parameters, a grid search seemed to be the best way. It allowed us to find a pair of parameters giving more than 98% accuracy on the test set. The biggest issue here was certainly the computation time, which already needs a few hours for 25 different pairs of parameters in RBF.
 
-**2b** 
-
+**2b**   
 We implemented the MLP as follows. We started by creating the network with the different layers. Then the task is basically to go over each image in the training set for a certain amount of epochs in order to train the network by backpropagating the loss and tuning the weights. Once the network was sufficiently trained and not yet overfitted, we looped once over the validation set and tested the accuracy of our network (simply by checking whether the network predicted the number displayed on the image correctly).
 
-**2c** 
-
+**2c**  
 For this task we completed the CNN code provided in the task, which makes use of the library Torch. The rest of the implementation was reused and adapted code from task 2b. The main difference in adaption to 2b was that we were actually able to use batches. This allowed for a better runtime and as such some experimenting with the hyperparameters.
 
 **2d**  
-
 There was not very much to do for this exercise except copying code from 2b and 2c and adapting it to the new task. This could have gone much better with a proper framework.
 
 #### Issues & Successes
