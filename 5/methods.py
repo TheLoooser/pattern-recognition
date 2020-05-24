@@ -76,8 +76,10 @@ def moleculeEdgesListToEdgeCountList(nr, edgesList):
 
 
 # lecture 10 slide 21 (bipartite graph matching)
-def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
+def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
+    
     #1. build dirac cost matrix
+    start = time.time()
     matrix = np.matrix(np.ones((len(molecule1)+len(molecule2),len(molecule1)+len(molecule2))) * np.inf)
     #Upper left: substitutions
     for i in range(0, len(molecule1)):
@@ -101,29 +103,40 @@ def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
         for j in range(0, len(molecule1)):
             matrix.itemset((len(molecule1) + i,len(molecule2) + j),0) 
             
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('build cost matrix: {}'.format(time_taken))
+
+            
 #     return matrix
     
     #2. find optimal assignment (using Hungarian algorithm)
     #replace infinity with max int
+    start = time.time()
     matrix = np.where(matrix == np.inf, sys.maxsize, matrix)
     #Hungarian algorithm (get total cost)
     matrix = matrix.tolist()
     m = Munkres()
     indexes = m.compute(matrix)
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('optimal assignment: {}'.format(time_taken))
     
     #3. calculate edit path distance/cost (of the optimal assignment)
+    start = time.time()
     total = 0
     for row, column in indexes:
         value = matrix[row][column]
         total += value
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('edit distance: {}'.format(time_taken))
     
     #4. return distance/cost
     return total
   
     
     
-def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
+def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
     
+    start = time.time()
     molecule1 = np.array(molecule1)
     molecule2 = np.array(molecule2)
     edges1 = np.array(edges1)
@@ -131,14 +144,22 @@ def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
     
     #1. build dirac cost matrix
     cost_matrix = dirac_cost_matrix(molecule1,molecule2,edges1,edges2,Ce,Cn)
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('build cost matrix: {}'.format(time_taken))
                 
     #2. find optimal assignment (using Hungarian Algorithm)
+    start = time.time()
     m = Munkres()
     indices = m.compute(cost_matrix.tolist())
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('optimal assignment: {}'.format(time_taken))
 
     #3. calculate edit path distance/cost (of the optimal assignment)
+    start = time.time()
     edit_distance = sum([cost_matrix[i,j] for (i,j) in indices])
-
+    time_taken = time.time()- start
+    if verbose and time_taken > 0.00001: print('edit distance: {}'.format(time_taken))
+    
     return edit_distance
 
 
