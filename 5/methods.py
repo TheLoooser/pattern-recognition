@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import time
 from munkres import Munkres, print_matrix
+from scipy.optimize import linear_sum_assignment
 
 def importMolecule(path):
     roots = []
@@ -149,16 +150,9 @@ def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
                 
     #2. find optimal assignment (using Hungarian Algorithm)
     start = time.time()
-    m = Munkres()
-    indices = m.compute(cost_matrix.tolist())
-    time_taken = time.time()- start
+    indices = linear_sum_assignment(cost_matrix)
+    edit_distance = cost_matrix[indices].sum()
     if verbose and time_taken > 0.00001: print('optimal assignment: {}'.format(time_taken))
-
-    #3. calculate edit path distance/cost (of the optimal assignment)
-    start = time.time()
-    edit_distance = sum([cost_matrix[i,j] for (i,j) in indices])
-    time_taken = time.time()- start
-    if verbose and time_taken > 0.00001: print('edit distance: {}'.format(time_taken))
     
     return edit_distance
 
