@@ -1,4 +1,4 @@
-## Welcome to our pattern recognition group "insert_name"
+## Welcome to our pattern recognition group DDENG!
 
-Explanations for each task is in the corresponding folder.
+Exercise and explanation for each task are in the corresponding folder.
 
