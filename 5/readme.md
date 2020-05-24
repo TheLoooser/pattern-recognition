@@ -9,4 +9,4 @@ For the computation of the edit distance between molecules we determined - as pr
 The best accuracy we achieved with the tested hyperparameter was 0.996 (which is the case where 1 of the 250 molecules in the validation set is misclassified). This was however possible with a slew of different hyperparameters. The bigger Cn the more probable are small Ce to decrease the accuracy. For example for Cn = 0.01 Ce in the range between 0.01 and 10 still result in accuracy 0.996 while for Cn = 10 of our tested Ce values only Ce = 10 achieves still the same accuracy. To get more precice information on the optimal hyperparameters the model would have to be run with more data.
 As for the nearest neighbours, for good Cn-Ce combinations it was often enough to take only the nearest neighbour. For bigger k the accuracy begins to decrease as can be seen in the following plog generated with Cn=1 and Ce=1. 
 
-[accuracy over knn][https://github.com/TheLoooser/pattern-recognition/blob/master/5/Accuracy_knn.png]
+![accuracy over knn](https://github.com/TheLoooser/pattern-recognition/blob/master/5/Accuracy_knn.png)
