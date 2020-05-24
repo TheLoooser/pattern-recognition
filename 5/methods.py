@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 import numpy as np
 import sys
+import time
 from munkres import Munkres, print_matrix
 
 def importMolecule(path):
@@ -119,3 +120,52 @@ def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
     #4. return distance/cost
     return total
   
+    
+    
+def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
+    
+    molecule1 = np.array(molecule1)
+    molecule2 = np.array(molecule2)
+    edges1 = np.array(edges1)
+    edges2 = np.array(edges2)
+    
+    #1. build dirac cost matrix
+    cost_matrix = dirac_cost_matrix(molecule1,molecule2,edges1,edges2,Ce,Cn)
+                
+    #2. find optimal assignment (using Hungarian Algorithm)
+    m = Munkres()
+    indices = m.compute(cost_matrix)
+
+    #3. calculate edit path distance/cost (of the optimal assignment)
+    edit_distance = sum([cost_matrix[i,j] for (i,j) in indices])
+
+    return edit_distance
+
+
+def dirac_cost_matrix(molecule1,molecule2, edges1,edges2, Ce, Cn):
+    
+    length1 = len(molecule1)
+    length2 = len(molecule2)
+    
+    #Upper left: substitutions
+    mask = molecule1[:,np.newaxis] != molecule2 # check if atoms ar different
+    edgeDifference = np.abs(edges1[:, np.newaxis] - edges2)
+    substitutions = Ce * edgeDifference + 2*Cn*mask
+    
+    #Upper right: deletions
+    deletions = np.ones((length1,length1)) * np.inf
+    deletion_costs = Cn + Ce*edges1
+    np.fill_diagonal(deletions, deletion_costs)
+    
+    #Lower left: insertions
+    insertions = np.ones((length2,length2)) * np.inf
+    insertion_costs = Cn + Ce*edges2
+    np.fill_diagonal(insertions,insertion_costs)    
+    
+    #Lower right: zeros
+    dummy_assignment = np.zeros((length2,length1))
+                                 
+    #build entire matrix
+    left = np.concatenate((substitutions,insertions))
+    right = np.concatenate((deletions,dummy_assignment))
+    return np.concatenate((left,right),axis=1)
