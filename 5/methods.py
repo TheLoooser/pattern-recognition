@@ -46,37 +46,12 @@ def moleculeToList(molecules):
 
     return nodesDict, edgesDict, edgesCountDict
 
-# # transform list of molecule nodes to dictionnary (key: molecule_id, value: molecule_symbols)
-# def moleculeNodeListToDict(nodesList):
-#     nodesDict = dict()
-# #     id_counter = 0
-#     for node in nodesList:
-#         nodesDict[node[0]] = node[1]
-# #         nodesDict[id_counter] = {"id": node[0], "symbols": node[1]}
-# #         id_counter += 1
-#     return nodesDict
-
-# # transform list of molecule edges to dictionnary (key: molecule_id, value: list of molecule_edges)
-# def moleculeEdgeListToDict(edgesList):
-#     edgesDict = dict()
-#     for edge in edgesList:
-#         edgesDict[edge[0]] = edge[1]
-#     return edgesDict
-
 # counts the number of edges of each node (of a single molecule)
 def moleculeEdgesListToEdgeCountList(nr, edgesList):
     count = list()
     for i in range(nr):
         count.append(sum(x.count(i+1) for x in edgesList))
     return count
-
-# # transforms the list of edges into a dictionnary which counts the number of edges of each node (of ever molecule)
-# def moleculeEdgesListToEdgeCountDict(nodesList, edgesDict):
-#     edgesCountDict = dict()
-#     for molecule in nodesList:
-#         nr = len(molecule[1])
-#         edgesCountDict[molecule[0]] = moleculeEdgesListToEdgeCountList(nr, edgesDict[molecule[0]])
-#     return edgesCountDict
 
 
 # lecture 10 slide 21 (bipartite graph matching)
@@ -109,9 +84,6 @@ def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
             
     time_taken = time.time()- start
     if verbose and time_taken > 0.00001: print('build cost matrix: {}'.format(time_taken))
-
-            
-#     return matrix
     
     #2. find optimal assignment (using Hungarian algorithm)
     #replace infinity with max int
@@ -137,7 +109,7 @@ def BP(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
     return total
   
     
-    
+# fast version of BP where we make full use of numpy
 def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
     
     start = time.time()
@@ -159,7 +131,7 @@ def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1, verbose=False):
     
     return edit_distance
 
-
+# returns cost matrix between molecule 1 and molecule 2
 def dirac_cost_matrix(molecule1,molecule2, edges1,edges2, Ce, Cn):
     
     length1 = len(molecule1)
