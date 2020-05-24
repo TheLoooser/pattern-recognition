@@ -10,24 +10,19 @@ The less technical part of the documentation was written by the member that had 
 ## Tasks
 ### Task 2a-d: SVM, CNN, MLP
 #### Specialities
-**2b**  
-One thing which probably sets our solution apart from the others is that we oriented ourselves too closely to the lecture. I.e. we implemented the MSE criterion, which influenced our performance significantly.  
+**2b** One thing which probably sets our solution apart from the others is that we oriented ourselves too closely to the lecture. I.e. we implemented the MSE criterion, which influenced our performance significantly.  
   
 There is not much special about the other parts for task 2.
 
 #### Approach
-**2a**  
-The idea was to use a library for SVM and Cross-validation and then try different techniques to search for the best parameters for two different kernels: RBF and linear. There was only one parameter to optimize for the implementation with the linear kernel, meaning that multiple algorithms could be tried to find the optimal C. Despite those possibilities, there are a lot of local optimums for C, making it difficult to find the real best parameter.
+**2a** The idea was to use a library for SVM and Cross-validation and then try different techniques to search for the best parameters for two different kernels: RBF and linear. There was only one parameter to optimize for the implementation with the linear kernel, meaning that multiple algorithms could be tried to find the optimal C. Despite those possibilities, there are a lot of local optimums for C, making it difficult to find the real best parameter.
 For the RBF kernel, there were two parameters to optimize. To find the best - or at least a good - pair of parameters, a grid search seemed to be the best way. It allowed us to find a pair of parameters giving more than 98% accuracy on the test set. The biggest issue here was certainly the computation time, which already needs a few hours for 25 different pairs of parameters in RBF.
 
-**2b**  
-We implemented the MLP as follows. We started by creating the network with the different layers. Then the task is basically to go over each image in the training set for a certain amount of epochs in order to train the network by backpropagating the loss and tuning the weights. Once the network was sufficiently trained and not yet overfitted, we looped once over the validation set and tested the accuracy of our network (simply by checking whether the network predicted the number displayed on the image correctly).
+**2b** We implemented the MLP as follows. We started by creating the network with the different layers. Then the task is basically to go over each image in the training set for a certain amount of epochs in order to train the network by backpropagating the loss and tuning the weights. Once the network was sufficiently trained and not yet overfitted, we looped once over the validation set and tested the accuracy of our network (simply by checking whether the network predicted the number displayed on the image correctly).
 
-**2c**  
-For this task we completed the CNN code provided in the task, which makes use of the library Torch. The rest of the implementation was reused and adapted code from task 2b. The main difference in adaption to 2b was that we were actually able to use batches. This allowed for a better runtime and as such some experimenting with the hyperparameters.
+**2c** For this task we completed the CNN code provided in the task, which makes use of the library Torch. The rest of the implementation was reused and adapted code from task 2b. The main difference in adaption to 2b was that we were actually able to use batches. This allowed for a better runtime and as such some experimenting with the hyperparameters.
 
-**2d**  
-There was not very much to do for this exercise except copying code from 2b and 2c and adapting it to the new task. This could have gone much better with a proper framework.
+**2d** There was not very much to do for this exercise except copying code from 2b and 2c and adapting it to the new task. This could have gone much better with a proper framework.
 
 #### Issues & Successes
 One drawback of our implementations was certainly that we did not build a simple framework. With some helperfiles and some basic functionality most tasks could have been implemented faster. Especially overhead like reading in files and preprocessing datasets. This led to a lot of loose code and unstructured files.  
@@ -63,12 +58,12 @@ Our approach to this task is quite straight forward. We started by creating a di
 We only had one issue with this task, namely we had a disagreement on how we should implement the KNN algorithm, but once we sorted that out (with the help of our lovely assistant) we managed to classify the molecules quite successfully. We reached an accuracy of 99.6% extremely fast without having to optimize the parameters very much. We however still implemented a grid search but couldn't find any hyperparameters with better accuracy. But in the process we were able to get the computation time for one set of hyperparameters down to less than 20 seconds on average.
 
 ---
-### What worked? What did not work?
+## What worked? What did not work?
 
 As already mentioned, our philosophy consisted in not assigning personal responsibilities to different team members. This strategy somehow always worked out in the end in the sense that we were able to hand in solutions and pass all group exercises. But at the beginning we had some problems with our time management. We got into serious time pressure when we had to hand in Exercises 2a-d, meaning that several team members worked several hours before the deadline in order to finish in time. This also meant that we were only able to hand in minimal solutions since we had to set priorities and could not develop more elaborate solutions. Our time management then got better after each exercise because (among other reasons) we appealed to each other that we don’t want to make the same error and do the work for the following exercise a few days/hours before the deadline. For Exercise 3 we still worked on the day we had to hand in our solutions, but it was less stressful. For Exercise 5 we even managed to more or less finish the exercise two days before the deadline. The last exercise was significantly shorter than the previous ones, which was probably also a reason for finishing so much earlier than the previous exercises.
 The inherent problem of a “laissez-faire” organization strategy is that in larger groups, members might assume that someone else would do the work. But if everyone assumes that, nobody will end up doing the work. Generally speaking, the success of our way to organize group work depends highly on the different personalities of the group members. We noticed that some group members started relatively early to work on the exercises, while some waited longer and started working a few days before the exercises. Our organization strategy would obviously work very well if all team members started working early on the exercises and very badly if all group members work best when they are under time pressure. But in the end we always managed to get the work done.
 
-### Improvements for next time
+## Improvements for next time
 One thing that certainly will be improved for the next group project is that everyone should be on the same page regarding used tools. A short FAQ might help. In our group we had members who used jupyter notebooks and some plain python files, which made working together more difficult. Even more so as the ones using python files did not understand jupyter notebooks yet.  
 The second thing regarding tools is usage of github. When working together on github everyone should know the basics functions and workflow. For our projects to come we will ensure that those issues are resolved before starting with the exercises.  
 Last but not least is performance. In the beginning of each task we underestimated how extremely time consuming even small classifications can become and opted for basic loops and dictionaries. With time we learned that numpy and vectorized functions can save lots of time. At least if no libraries are available. It sure does make sense to get an understanding with basic implementations, but next time we will do so with performance in mind from the beginning.
