@@ -6,6 +6,7 @@ import time
 from munkres import Munkres, print_matrix
 from scipy.optimize import linear_sum_assignment
 
+#Import molecules from .gxl files and stores them as elements
 def importMolecule(path):
     roots = []
     for molecule in os.listdir(path):
@@ -13,6 +14,8 @@ def importMolecule(path):
         roots.append([int(molecule.replace('.gxl','')), ET.parse(path + '\\' + molecule).getroot()])
     return roots
 
+#Transforms a list of molecules into 3 dictionaries: one containing the nodes for each molecule,
+#one the edges for each molecule and one with the number of edges assigned to each nodes for each molecule
 def moleculeToList(molecules):
     nodesList = []
     # edgesList = []
