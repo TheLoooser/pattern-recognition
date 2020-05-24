@@ -134,7 +134,7 @@ def BP_fast(molecule1, molecule2, edges1, edges2, Cn=1, Ce=1):
                 
     #2. find optimal assignment (using Hungarian Algorithm)
     m = Munkres()
-    indices = m.compute(cost_matrix)
+    indices = m.compute(cost_matrix.tolist())
 
     #3. calculate edit path distance/cost (of the optimal assignment)
     edit_distance = sum([cost_matrix[i,j] for (i,j) in indices])
